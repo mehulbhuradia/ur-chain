@@ -28,8 +28,17 @@ class Transaction{
         transaction.input={
             timestamp: Date.now(),
             amount: senderWallet.balance,
-            address: senderWallet.sign(ChainUtil.hash(transaction.outputs))
+            address: senderWallet.publicKey,
+            signature: senderWallet.sign(ChainUtil.hash(transaction.outputs))
         }
+    }
+
+    static verifyTransaction(transaction){
+        return ChainUtil.verifySignature(
+            transaction.input.address,
+            transaction.input.signature,
+            ChainUtil.hash(transaction.outputs)
+            );
     }
 }
 
